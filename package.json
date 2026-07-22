@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --repo https://github.com/TES-EDU/clocktest.git"
+    "deploy": "gh-pages -d dist --repo https://github.com/TES-EDU/clock.git"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.1",
