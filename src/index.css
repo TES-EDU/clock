@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 온글잎 박다현체 폰트 */
+@font-face {
+  font-family: 'OwnglyphParkDaHyun';
+  src: url('/온글잎 박다현체.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 기본 스타일 — Beach Sunset palette */
+:root {
+  --color-frozen-water: #BEE9E8;
+  --color-pacific-blue: #62B6CB;
+  --color-yale-blue: #1B4965;
+  --color-pale-sky: #CAE9FF;
+  --color-fresh-sky: #5FA8D3;
+  --color-cream: #FFFEEA;
+  --color-card-bg: #FFFFFF;
+  --color-border: #BEE9E8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'OwnglyphParkDaHyun', sans-serif;
+  background-color: var(--color-cream);
+  /* Safe area for notch/rounded corners on mobile */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* 스크롤바 숨기기 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* PWA 전체화면 지원 */
+@media all and (display-mode: standalone) {
+  body {
+    overflow: hidden;
+  }
+}
+
+/* 버튼 기본 리셋 */
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: 'OwnglyphParkDaHyun', sans-serif;
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* 접근성 - 키보드 포커스 시 인디케이터 표시 */
+button:focus-visible {
+  outline: 3px solid var(--color-pacific-blue);
+  outline-offset: 2px;
+}
+
+/* 키패드 버튼 */
+@layer components {
+  .keypad-btn {
+    @apply flex items-center justify-center rounded-2xl text-2xl font-bold
+           transition-all duration-100 active:scale-95;
+    min-height: 3rem;
+  }
+
+  /* 화면 전환 */
+  .screen-enter {
+    @apply animate-fade-in;
+  }
+}
+
+/* 모바일 가로 모드 전용 (폰만 해당, 태블릿/PC 제외) */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 900px) {
+  .start-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    margin-top: 0.5rem !important;
+  }
+  .start-form {
+    flex-direction: row !important;
+    width: auto !important;
+    gap: 0.5rem !important;
+  }
+  .start-input {
+    width: 10rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 0.95rem !important;
+  }
+  .start-btn {
+    width: auto !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 1.1rem !important;
+  }
+  /* 일시정지 팝업 */
+  .pause-modal {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  .pause-icon {
+    display: none !important;
+  }
+}
