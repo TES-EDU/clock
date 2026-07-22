@@ -1,12 +1,10 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
-import { Copy, Check, Loader2, RefreshCw, LogOut, ChevronRight, Search, Home } from 'lucide-react';
+import { Copy, Check, Loader2, RefreshCw, ChevronRight, Search, Home } from 'lucide-react';
 import { getAllMathResults, getStudents, getClasses, type MathResultRow, type StudentRow, type ClassRow } from '../../../lib/supabase';
 
 interface Props { onStudentClick: (studentName: string) => void; }
 
 type DateFilter = 'all' | 'today' | 'yesterday' | '2daysAgo' | 'custom';
-
-const TEACHER_PASSWORD = '1234';
 
 // 반 설정: 이름, 비밀번호, 색상
 const BRANCH_CONFIG = [
@@ -21,9 +19,6 @@ function fmtDateTime(dateStr: string | undefined): string {
 }
 
 export default function AdminPage({ onStudentClick }: Props) {
-  const [teacherAuthed, setTeacherAuthed] = useState(false);
-  const [teacherPassword, setTeacherPassword] = useState('');
-  const [teacherError, setTeacherError] = useState('');
   const [results, setResults] = useState<MathResultRow[]>([]);
   const [students, setStudents] = useState<StudentRow[]>([]);
   const [classes, setClasses] = useState<ClassRow[]>([]);
@@ -45,30 +40,7 @@ export default function AdminPage({ onStudentClick }: Props) {
     setLoading(false);
   }, []);
 
-  useEffect(() => { if (teacherAuthed) loadAll(); }, [teacherAuthed, loadAll]);
-
-  const handleTeacherLogin = () => {
-    if (teacherPassword !== TEACHER_PASSWORD) {
-      setTeacherError('선생님 비밀번호가 올바르지 않습니다.');
-      return;
-    }
-    setTeacherError('');
-    setTeacherPassword('');
-    setTeacherAuthed(true);
-  };
-
-  const handleTeacherLogout = () => {
-    setTeacherAuthed(false);
-    setTeacherPassword('');
-    setTeacherError('');
-    setSelectedBranch(null);
-    setUnlockedBranch(null);
-    setBranchPassword('');
-    setBranchError('');
-    setResults([]);
-    setStudents([]);
-    setClasses([]);
-  };
+  useEffect(() => { loadAll(); }, [loadAll]);
 
   const handleCopy = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
@@ -144,48 +116,6 @@ export default function AdminPage({ onStudentClick }: Props) {
   }, [results, selectedBranch, isBranchUnlocked, branchStudentNames, dateFilter, customDate, query]);
 
 
-  // ── Teacher Password Login ──
-  const TeacherLoginView = () => (
-    <div className="min-h-screen bg-sb-bg flex items-center justify-center px-6 font-game">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-sb-primary to-sb-primary-dark mb-4 shadow-lg">
-            <span className="text-3xl">👨‍🏫</span>
-          </div>
-          <h1 className="text-3xl font-extrabold text-sb-ink">선생님 로그인</h1>
-          <p className="text-lg text-sb-muted mt-1">시계 성적 관리</p>
-        </div>
-
-        <div className="bg-sb-surface rounded-2xl shadow-sm border border-sb-line p-6 font-sans">
-          <label htmlFor="teacher-password" className="block text-sm font-bold text-sb-ink mb-2">선생님 비밀번호</label>
-          <input
-            id="teacher-password"
-            type="password"
-            value={teacherPassword}
-            onChange={(e) => { setTeacherPassword(e.target.value); setTeacherError(''); }}
-            onKeyDown={(e) => e.key === 'Enter' && handleTeacherLogin()}
-            autoFocus
-            placeholder="비밀번호를 입력하세요"
-            className="w-full h-12 px-4 rounded-xl border-2 border-sb-line bg-white text-center text-lg font-bold outline-none focus:border-sb-primary transition-colors"
-          />
-          {teacherError && <p className="text-red-500 text-sm font-medium text-center mt-2">{teacherError}</p>}
-          <button
-            onClick={handleTeacherLogin}
-            className="w-full h-12 mt-4 rounded-xl bg-sb-primary-dark text-white font-bold text-base hover:bg-sb-primary transition-colors"
-          >
-            로그인
-          </button>
-        </div>
-
-        <a href={import.meta.env.BASE_URL} className="block text-center text-lg text-sb-muted hover:text-sb-primary-dark mt-6 transition-colors">
-          학생 페이지로 돌아가기
-        </a>
-      </div>
-    </div>
-  );
-
-  if (!teacherAuthed) return <TeacherLoginView />;
-
   // ── Header ──
   const Header = () => (
     <header className="bg-sb-surface border-b border-sb-line px-4 md:px-5 h-14 flex items-center justify-between sticky top-0 z-10">
@@ -213,9 +143,6 @@ export default function AdminPage({ onStudentClick }: Props) {
         </button>
         <button onClick={loadAll} className="p-2 md:p-0 flex items-center gap-1.5 text-sm text-sb-muted hover:text-sb-primary-dark transition-colors">
           <RefreshCw size={16} /><span className="hidden md:inline">새로고침</span>
-        </button>
-        <button onClick={handleTeacherLogout} className="p-2 md:p-0 flex items-center gap-1.5 text-sm text-sb-muted hover:text-sb-wrong-dark transition-colors">
-          <LogOut size={16} /><span className="hidden md:inline">로그아웃</span>
         </button>
       </div>
     </header>

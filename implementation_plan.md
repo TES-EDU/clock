@@ -113,7 +113,7 @@ function generateClockProblem(level: number): ClockProblem {
 시작화면 (이름/지점) → 난이도 선택 (1~8단계) → 시계 풀기 (20문제) → 결과 화면
                                                                     ↓
                                                               Supabase 저장
-                   선생님 페이지 (?admin=true) ← 선생님 공통 비밀번호 + 반 선택 + 반 비밀번호
+                   선생님 페이지 (?admin=true) ← 반 선택 + 반 비밀번호
 ```
 
 ### 시계 풀기 화면 레이아웃
