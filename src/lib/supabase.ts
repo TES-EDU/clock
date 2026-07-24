@@ -172,6 +172,7 @@ export async function getMathResult(id: string): Promise<MathResultRow | null> {
     .from('math_results')
     .select('*')
     .eq('id', id)
+    .eq('book_title', 'TES 시계')
     .single();
 
   if (error) {
